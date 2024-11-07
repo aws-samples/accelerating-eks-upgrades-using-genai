@@ -322,20 +322,6 @@ def invoke_bedrock_model(prompt, br_region, br_model):
         logger.error("Failed to invoke the Bedrock model after maximum retries.")
         raise Exception("Failed to invoke the Bedrock model after maximum retries.")
 
-    # bedrock_client = boto3.client("bedrock-runtime", region_name=br_region)
-    # body = {
-    #     "messages": [{"role": "user", "content": [{"type": "text", "text": prompt}]}],
-    #     "anthropic_version": "bedrock-2023-05-31",
-    #     "max_tokens": 4000,
-    # }
-    # accept = "application/json"
-    # contentType = "application/json"
-    # response = bedrock_client.invoke_model(
-    #     body=json.dumps(body), modelId=br_model, accept=accept, contentType=contentType
-    # )
-    # response_body = json.loads(response.get("body").read())
-    # return response_body.get("content")[0]["text"]
-
 
 def get_bedrock_suggestions(
     br_region, br_model, manifest, target_version, api_status, new_api_version=None
@@ -346,7 +332,7 @@ def get_bedrock_suggestions(
     if api_status == "removed":
         input_prompt = (
             f"\n\nHuman: Can you try creating {resource_kind} using API group {api_version} on Kubernetes "
-            f"{target_version}. If it fails, find alternate solutions, custom or external, generate YAML for {resource_kind} that works on Kubernetes {target_version} "
+            f"{target_version}. If it fails, find alternate solutions and generate YAML for {resource_kind} that works on Kubernetes {target_version} "
             f"\n\nAssistant:"
         )
         return invoke_bedrock_model(input_prompt, br_region, br_model)
